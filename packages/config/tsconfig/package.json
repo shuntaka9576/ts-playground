@@ -1,0 +1,7 @@
+{
+  "name": "@ts-playground/tsconfig",
+  "scripts": {
+    "check": "echo 'no settings'",
+    "fix": "echo 'no settings'"
+  }
+}
