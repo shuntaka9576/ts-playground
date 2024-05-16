@@ -46,13 +46,13 @@ async function combineFilesS3(files: string[], outputKey: string) {
 
   const uploadId = createUploadResponse.UploadId!;
   const partSize = 5 * 1024 * 1024; // 5MBパート
-  const partPromises = files.flatMap(async (file, index) => {
+  let partNumber = 1; // パート番号の初期化
+  const parts = [];
+
+  for (const file of files) {
     const size = await getObjectSize(file);
-    const parts = [];
     for (let startByte = 0; startByte < size; startByte += partSize) {
       const endByte = Math.min(startByte + partSize - 1, size - 1);
-      const partNumber = index + 1;
-
       const copyCommand = new UploadPartCopyCommand({
         Bucket: BUCKET_NAME,
         Key: outputKey,
@@ -66,11 +66,12 @@ async function combineFilesS3(files: string[], outputKey: string) {
         ETag: copyResponse.CopyPartResult!.ETag,
         PartNumber: partNumber,
       });
+      partNumber++; // 次のパート番号に進む
     }
-    return parts;
-  });
+  }
 
-  const parts = (await Promise.all(partPromises)).flat();
+  // パート番号でソート（念のため）
+  parts.sort((a, b) => a.PartNumber - b.PartNumber);
 
   // マルチパートアップロードの完了
   const completeUploadCommand = new CompleteMultipartUploadCommand({
