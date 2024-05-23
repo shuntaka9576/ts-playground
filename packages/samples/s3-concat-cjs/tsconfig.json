@@ -1,0 +1,3 @@
+{
+  "extends": "@ts-playground/tsconfig/cjs"
+}

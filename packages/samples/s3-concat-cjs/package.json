@@ -1,0 +1,20 @@
+{
+  "name": "@ts-playground/s3-concat-cjs",
+  "scripts": {
+    "dev": "ts-node ./src/index.mts",
+    "check": "run-p check:*",
+    "check:format": "npx @biomejs/biome format .",
+    "check:lint": "npx @biomejs/biome lint .",
+    "check:type": "tsc --noEmit",
+    "check:cspell": "cspell '**/*.{mts,json}' --cache --gitignore",
+    "fix": "npx @biomejs/biome format . --write",
+    "unit": "vitest run --config vite.unit.config.mts --coverage.enabled true"
+  },
+  "devDependencies": {
+    "@types/luxon": "3.4.2",
+    "@types/node": "20.11.16"
+  },
+  "dependencies": {
+    "luxon": "3.4.4"
+  }
+}
